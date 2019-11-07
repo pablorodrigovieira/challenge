@@ -7,6 +7,7 @@
 <body>
 <!-- Scripts -->
 <script type="text/javascript" src="scripts/roster.js"></script>
+<script type="text/javascript" src="scripts/users.js"></script>
 <script type="text/javascript" src="scripts/helpers.js"></script>
 <script>
   // Variables used for simulations
@@ -16,6 +17,7 @@
 
   let firstShiftDateTimeStart = 1508450400;
   let firstShiftDateTimeEnd   = 1508479200;
+  // Convert the unix into milliseconds
   firstShiftDateTimeStart = dateConvertHelper(firstShiftDateTimeStart);
   firstShiftDateTimeEnd = dateConvertHelper(firstShiftDateTimeEnd);
 
@@ -53,6 +55,51 @@
 
   const objRoster4 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStartNew,shiftDateTimeEnd);
   simulateShifts(objRoster1, objRoster4);
+
+    // Question 2
+    printNewLine();
+    printData('Question 2');
+    printNewLine();
+
+    // Arrays of roles information
+    const ids = [1,2,3,4];
+    const rolesTitles = ['System Administrator', 'Location Manager', 'Supervisor', 'Employee'];
+    const parentIds = [0,1,2,3];
+
+    // Instantiate roles objects based on the information above
+    let arrayOfRoles = [];
+    for (let i in ids){
+      let role = new Role(ids[i], rolesTitles[i], parentIds[i]);
+      arrayOfRoles.push(role)
+    }
+
+    // Array of users and roles
+    const names = ['Adam Admin', 'Emily Employee', 'Sam Supervisor', 'Mary Manager'];
+    const roleIds = [1,4,3,2];
+
+    // Instantiate users objects based on the information above
+    let arrayOfUsers = [];
+    for (let i in ids){
+        let user = new User(ids[i], names[i], roleIds[i]);
+        arrayOfUsers.push(user)
+    }
+
+    // Create an array of objects with current users and his/her subordinates
+    let allUsersData = [];
+    for(const user in arrayOfUsers){
+      let userObjects = {};
+      userObjects.subordinates = {};
+      // Get subordinates of the current user
+      let subordinates = arrayOfUsers[user].findSubordinates(arrayOfUsers,arrayOfRoles);
+      // if there is subordinate then push into the array
+      if(subordinates){
+        userObjects.currentUser = arrayOfUsers[user];
+        userObjects.subordinates = subordinates
+      }
+      allUsersData.push(userObjects)
+    }
+    printData(allUsersData)
+
 </script>
 </body>
 </html>

@@ -6,6 +6,53 @@
 </head>
 <body>
 <!-- Scripts -->
-<script src="scripts/roster.js"></script>
+<script type="text/javascript" src="scripts/roster.js"></script>
+<script type="text/javascript" src="scripts/helpers.js"></script>
+<script>
+  // Variables used for simulations
+  let rosterId = 1;
+  let employeeId = 1;
+  let departmentId = 1;
+
+  let firstShiftDateTimeStart = 1508450400;
+  let firstShiftDateTimeEnd   = 1508479200;
+  firstShiftDateTimeStart = dateConvertHelper(firstShiftDateTimeStart);
+  firstShiftDateTimeEnd = dateConvertHelper(firstShiftDateTimeEnd);
+
+  const objRoster1 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
+
+  // Add one day to simulate new shifts
+  let shiftDateTimeStart = new Date(firstShiftDateTimeStart);
+  let oneDayAfterStart = (shiftDateTimeStart.getDate()+1);
+  shiftDateTimeStart.setDate(oneDayAfterStart);
+  let shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
+  shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()+1);
+
+  // Create new shift
+  rosterId++;
+  const objRoster2 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStart,shiftDateTimeEnd);
+
+  printData('Simulate scenario 1');
+  simulateShifts(objRoster1, objRoster2);
+
+  // Simulate same days - times
+  printData('Simulate scenario 2 - Same dates');
+  rosterId++;
+  const objRoster3 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
+  simulateShifts(objRoster1, objRoster3);
+
+  // Simulate 3  dates before current shift
+  printNewLine();
+  printData('Simulate scenario 3 - dates before current shift');
+  rosterId++;
+  // Subtract one day to simulate new shifts
+  let shiftDateTimeStartNew = new Date(firstShiftDateTimeStart);
+  shiftDateTimeStartNew = shiftDateTimeStartNew.setDate(shiftDateTimeStartNew.getDate()-1);
+  shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
+  shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()-1);
+
+  const objRoster4 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStartNew,shiftDateTimeEnd);
+  simulateShifts(objRoster1, objRoster4);
+</script>
 </body>
 </html>

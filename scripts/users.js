@@ -49,11 +49,20 @@ class User {
         // Then loop the users array
         for(const user in arrayOfUsers) {
           // To get the users are subordinated to roleId
-          if(arrayOfUsers[user].role === roleId)
+          // And considering that the high level of management normally
+          // Has the employees under they management as subordinates
+          // E.g Administrators would have subordinates: Manager, Supervisor and Employee
+          if(arrayOfUsers[user].role >= roleId)
             subordinates.push(arrayOfUsers[user]);
         }
       }
     }
+
+    // Order the subordinates from high to low level of management
+    subordinates.sort(function(a, b) {
+      return a._role - b._role;
+    });
+
     return subordinates;
   }
 }

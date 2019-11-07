@@ -40,3 +40,7 @@ function printNewLine () {
 function printData (data) {
   console.log(data);
 }
+
+function printDataQuestion2 (data) {
+  console.log(data);
+}

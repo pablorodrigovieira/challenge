@@ -5,61 +5,93 @@
     <title>Deputy Challenge</title>
 </head>
 <body>
+<p>Please check the browser console for solutions outputs</p>
 <!-- Scripts -->
 <script type="text/javascript" src="scripts/roster.js"></script>
 <script type="text/javascript" src="scripts/users.js"></script>
 <script type="text/javascript" src="scripts/helpers.js"></script>
 <script>
-  // Variables used for simulations
-  let rosterId = 1;
-  let employeeId = 1;
-  let departmentId = 1;
+    // Variables used for simulations
+    let rosterId = 1;
+    let employeeId = 1;
+    let departmentId = 1;
 
-  let firstShiftDateTimeStart = 1508450400;
-  let firstShiftDateTimeEnd   = 1508479200;
-  // Convert the unix into milliseconds
-  firstShiftDateTimeStart = dateConvertHelper(firstShiftDateTimeStart);
-  firstShiftDateTimeEnd = dateConvertHelper(firstShiftDateTimeEnd);
+    let firstShiftDateTimeStart = 1508450400;
+    let firstShiftDateTimeEnd   = 1508479200;
+    // Convert the unix into milliseconds
+    firstShiftDateTimeStart = dateConvertHelper(firstShiftDateTimeStart);
+    firstShiftDateTimeEnd = dateConvertHelper(firstShiftDateTimeEnd);
 
-  const objRoster1 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
+    const objRoster1 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
 
-  // Add one day to simulate new shifts
-  let shiftDateTimeStart = new Date(firstShiftDateTimeStart);
-  let oneDayAfterStart = (shiftDateTimeStart.getDate()+1);
-  shiftDateTimeStart.setDate(oneDayAfterStart);
-  let shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
-  shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()+1);
+    // Add one day to simulate new shifts
+    let shiftDateTimeStart = new Date(firstShiftDateTimeStart);
+    let oneDayAfterStart = (shiftDateTimeStart.getDate()+1);
+    shiftDateTimeStart.setDate(oneDayAfterStart);
+    let shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
+    shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()+1);
 
-  // Create new shift
-  rosterId++;
-  const objRoster2 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStart,shiftDateTimeEnd);
+    // Create new shift
+    rosterId++;
+    const objRoster2 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStart,shiftDateTimeEnd);
 
-  printData('Simulate scenario 1');
-  simulateShifts(objRoster1, objRoster2);
+    printDataQuestion2('Question 1');
+    printNewLine();
+    printData('Simulating scenario 1');
+    printData('Submitting with different and correct start and end dates');
+    printData('System should display new shifts');
+    simulateShifts(objRoster1, objRoster2);
 
-  // Simulate same days - times
-  printData('Simulate scenario 2 - Same dates');
-  rosterId++;
-  const objRoster3 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
-  simulateShifts(objRoster1, objRoster3);
+    // Simulate 2
+    printData('Simulating scenario 2');
+    printData('Submitting with start date and end date same as Scenario 1');
+    printData('System should display current shift and cancel Scenario 2');
+    rosterId++;
+    const objRoster3 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeStart,firstShiftDateTimeEnd);
+    simulateShifts(objRoster1, objRoster3);
 
-  // Simulate 3  dates before current shift
-  printNewLine();
-  printData('Simulate scenario 3 - dates before current shift');
-  rosterId++;
-  // Subtract one day to simulate new shifts
-  let shiftDateTimeStartNew = new Date(firstShiftDateTimeStart);
-  shiftDateTimeStartNew = shiftDateTimeStartNew.setDate(shiftDateTimeStartNew.getDate()-1);
-  shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
-  shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()-1);
+    // Simulate 3
+    printNewLine();
+    printData('Simulating scenario 3');
+    printData('Submitting with different and correct start and end dates before current shift');
+    printData('System should display current shift and new shift');
+    rosterId++;
+    // Subtract one day to simulate new shifts
+    let shiftDateTimeStartNew = new Date(firstShiftDateTimeStart);
+    shiftDateTimeStartNew = shiftDateTimeStartNew.setDate(shiftDateTimeStartNew.getDate()-1);
+    shiftDateTimeEnd = new Date(firstShiftDateTimeEnd);
+    shiftDateTimeEnd = shiftDateTimeEnd.setDate(shiftDateTimeEnd.getDate()-1);
 
-  const objRoster4 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStartNew,shiftDateTimeEnd);
-  simulateShifts(objRoster1, objRoster4);
+    const objRoster4 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStartNew,shiftDateTimeEnd);
+    simulateShifts(objRoster1, objRoster4);
+
+    // Simulate 4
+    printData('Simulating scenario 4');
+    printData('Submitting with start date before current shift and end date during the shift');
+    printData('System should display current shift and cancel Scenario 4');
+    rosterId++;
+    // Subtract one day to simulate new shifts
+    let currentShiftDate = new Date(firstShiftDateTimeStart);
+    // + 6 hours to get into middle of the current shift
+    currentShiftDate = currentShiftDate.setTime(currentShiftDate.getTime()+(6*60*60*1000));
+
+    const objRoster5 = new Roster(rosterId,employeeId,departmentId,shiftDateTimeStartNew,currentShiftDate);
+    simulateShifts(objRoster1, objRoster5);
+
+    // Simulate 5
+    printNewLine();
+    printData('Simulating scenario 5');
+    printData('Submitting with start date after the end date');
+    printData('System should display current shift and cancel Scenario 5');
+    rosterId++;
+
+    const objRoster6 = new Roster(rosterId,employeeId,departmentId,firstShiftDateTimeEnd,firstShiftDateTimeStart);
+    simulateShifts(objRoster1, objRoster6);
 
     // Question 2
+
     printNewLine();
-    printData('Question 2');
-    printNewLine();
+    printDataQuestion2('Question 2');
 
     // Arrays of roles information
     const ids = [1,2,3,4];
@@ -98,7 +130,7 @@
       }
       allUsersData.push(userObjects)
     }
-    printData(allUsersData)
+    printDataQuestion2(allUsersData)
 
 </script>
 </body>

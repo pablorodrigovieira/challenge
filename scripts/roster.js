@@ -61,14 +61,18 @@ class Roster {
   verifyRosterEntries(newRoster){
     try{
       let newShiftApproved = false;
-      /*First verify if new shift will be start at the end or after
-        the current shift end time
-        otherwise check if the new shift is before the current shift*/
-      if(newRoster.startTime >= this.endTime)
-        newShiftApproved = true;
-      else if (newRoster.startTime < this.startTime)
-        newShiftApproved = true;
-
+      // Verify if the new roster end date is not before of the start
+      if(newRoster.endTime < newRoster.startTime)
+        newShiftApproved = false
+      else {
+        /*First verify if new shift will be start at the end or after
+          the current shift end time
+          otherwise check if the new shift is before the current shift*/
+        if(newRoster.startTime >= this.endTime)
+          newShiftApproved = true;
+        else if (newRoster.startTime < this.startTime && newRoster.endTime < this.startTime)
+          newShiftApproved = true;
+      }
       return newShiftApproved;
     } catch (e) {
       // Simulating error handling
